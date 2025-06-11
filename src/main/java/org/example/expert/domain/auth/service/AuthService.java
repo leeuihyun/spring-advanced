@@ -32,8 +32,6 @@ public class AuthService {
             throw new InvalidRequestException("이미 존재하는 이메일입니다.");
         }
 
-        log.warn("check");
-
         String encodedPassword = passwordEncoder.encode(signupRequest.getPassword());
 
         UserRole userRole = UserRole.of(signupRequest.getUserRole());
@@ -45,9 +43,7 @@ public class AuthService {
         );
         User savedUser = userRepository.save(newUser);
 
-        String bearerToken = jwtUtil.createToken(savedUser.getId(), savedUser.getEmail(), userRole);
-
-        return new SignupResponse(bearerToken);
+        return new SignupResponse(savedUser.getId());
     }
 
     @Transactional(readOnly = true)

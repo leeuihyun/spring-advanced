@@ -1,13 +1,18 @@
 package org.example.expert.domain.auth.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 public class SignupResponse {
 
-    private final String bearerToken;
+    private Long userId;
 
-    public SignupResponse(String bearerToken) {
-        this.bearerToken = bearerToken;
+    @JsonCreator
+    public SignupResponse(@JsonProperty("userId") Long userId) {
+        this.userId = userId;
     }
 }

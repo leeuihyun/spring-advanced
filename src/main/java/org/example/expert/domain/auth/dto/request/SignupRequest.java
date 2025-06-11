@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class SignupRequest {
 
     @NotBlank @Email
@@ -17,4 +16,10 @@ public class SignupRequest {
     private String password;
     @NotBlank
     private String userRole;
+
+    public SignupRequest(String email, String password, String userRole) {
+        this.email = email;
+        this.password = password;
+        this.userRole = userRole;
+    }
 }

@@ -2,6 +2,7 @@ package org.example.expert.domain.todo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.expert.client.WeatherClient;
+import org.example.expert.domain.auth.exception.AuthException;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
@@ -78,6 +79,28 @@ public class TodoService {
                 new UserResponse(user.getId(), user.getEmail()),
                 todo.getCreatedAt(),
                 todo.getModifiedAt()
+        );
+    }
+
+    @Transactional
+    public TodoResponse updateTodo(AuthUser authUser, TodoSaveRequest todoSaveRequest, Long todoId) {
+        Todo todo = todoRepository.findById(todoId)
+            .orElseThrow(() -> new InvalidRequestException("Todo not found"));
+
+        if(!authUser.getId().equals(todo.getUser().getId())) {
+            throw new AuthException("권한이 없습니다.");
+        }
+
+        todo.update(todoSaveRequest.getTitle(), todoSaveRequest.getContents());
+
+        return new TodoResponse(
+            todo.getId(),
+            todo.getTitle(),
+            todo.getContents(),
+            todo.getWeather(),
+            new UserResponse(authUser.getId(), authUser.getEmail()),
+            todo.getCreatedAt(),
+            todo.getModifiedAt()
         );
     }
 }
