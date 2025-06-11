@@ -2,6 +2,7 @@ package org.example.expert.domain.todo.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.example.expert.domain.common.annotation.Auth;
 import org.example.expert.domain.common.dto.AuthUser;
@@ -40,5 +41,13 @@ public class TodoController {
     @GetMapping("/todos/{todoId}")
     public ResponseEntity<TodoResponse> getTodo(@PathVariable long todoId) {
         return ResponseEntity.ok(todoService.getTodo(todoId));
+    }
+
+    @PutMapping("/todos/{todoId}")
+    public ResponseEntity<TodoResponse> updateTodo(
+        @RequestBody @Valid TodoSaveRequest todoSaveRequest,
+        @Auth AuthUser authUser, @PathVariable @NotNull Long todoId){
+
+        return ResponseEntity.ok(todoService.updateTodo(authUser, todoSaveRequest, todoId));
     }
 }
